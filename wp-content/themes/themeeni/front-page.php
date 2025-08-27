@@ -42,7 +42,8 @@
         //Pas d'articles trouvés
         echo '<p>Aucun article trouvé.</p>';
     }
-                ?>
+    ?>
+    <?php get_template_part('template-parts/newsletter');?>
 </main>
 <!-- #main -->
 <?php get_footer();?>
