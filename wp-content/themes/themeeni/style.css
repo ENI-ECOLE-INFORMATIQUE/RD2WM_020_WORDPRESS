@@ -1,0 +1,20 @@
+/*
+ Theme Name:   Theme ENI
+ Theme URI:    http://example.com/theme-eni/
+ Description:  Création d'un theme exemple pour le cours
+ Author:       ENI ECOLE
+ Author URI:   http://eni-ecole.fr
+ Version:      0.0.1
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
+ Text Domain:  themeeni
+*/
+
+body{
+	background-color: #F5F5F5;
+}
+
+.header img{
+    width: 50px;
+}
