@@ -14,6 +14,12 @@
             <img src="<?php echo get_template_directory_uri(); ?>/img/logo-eni.png" alt="logo ENI">
         </a>
         <?php wp_nav_menu(array('theme_location' => 'main')); ?>
+
     </header>
+<?php
+    if(function_exists('fil_ariane')){
+        echo "<div class=fil_ariane>".fil_ariane()."</div>";
+    }
+?>
 
 

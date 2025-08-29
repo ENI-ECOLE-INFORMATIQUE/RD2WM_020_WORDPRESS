@@ -19,3 +19,30 @@ register_nav_menus(
         'footer'=>'Bas de page',
     )
 );
+
+
+/*
+Création d'une fonction pour faire un fil d'ariane.
+*/
+
+function fil_ariane()
+{
+    global $post;
+    //Permet de savoir si on est sur la page d'accueil.
+    if (!is_home()) {
+        $fil = "Vous êtes ici : ";
+        $fil .= '<a href="' . get_bloginfo('wpurl') . '">';
+        $fil .= get_bloginfo('name');
+        $fil .= '</a> >';
+
+        $parents = array_reverse(get_ancestors($post->ID, 'page'));
+        foreach ($parents as $parent) {
+            $fil .= '<a href="' . get_permalink($parent) . '">';
+            $fil .= get_the_title($parent);
+            $fil .= '</a> >';
+        }
+        $fil .= $post->post_title;
+    }
+    return $fil;
+}
+
