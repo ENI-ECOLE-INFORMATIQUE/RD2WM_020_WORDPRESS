@@ -121,6 +121,14 @@ class Widget_Post extends WP_Widget {
         <?php
     }
 }
+
+function my_shortcode($attributes,$content,$shortcodeTag){
+    $html='<p>Bonjour '.($attributes['name']??'').' depuis le shortcode '.$shortcodeTag.'. '.$content;
+    return $html;
+}
+
+add_shortcode('bonjour','my_shortcode');
+
 function register_my_widget(){
     register_widget('Widget_Post');
 }
