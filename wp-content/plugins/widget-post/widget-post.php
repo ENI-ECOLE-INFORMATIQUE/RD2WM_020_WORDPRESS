@@ -123,7 +123,7 @@ class Widget_Post extends WP_Widget {
 }
 
 function my_shortcode($attributes,$content,$shortcodeTag){
-    $html='<p>Bonjour '.($attributes['name']??'').' depuis le shortcode '.$shortcodeTag.'. '.$content;
+    $html='<p>Bonjour '.($attributes['name']??'').' depuis le shortcode '.$shortcodeTag.'. '.$content.'</p>';
     return $html;
 }
 
