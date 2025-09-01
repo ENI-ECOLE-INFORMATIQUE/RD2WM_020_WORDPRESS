@@ -1,4 +1,4 @@
-=== Classic Editor ===
+=== Widget WordPress ===
 Contributors: ENI ECOLE
 Tags: widget,
 Requires at least: 6.8.2
