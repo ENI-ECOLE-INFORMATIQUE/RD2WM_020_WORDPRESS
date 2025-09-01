@@ -17,13 +17,26 @@ class Widget_Post extends WP_Widget {
     /**
     Méthode de construction du même nom que la classe qui sert à configurer le widget.
      */
-    function Widget_Post(){
+   /* function Widget_Post(){
         $widget_ops = array('classname'=>'widget-post',
             'description'=>'Widget permmettant l\'affichage d\'une liste d\'articles selon la catégorie');
         $control_ops = array('width'=>300,
             'height'=>350,
             'id_base'=>'widget-post');
         $this->WP_Widget('widget-post','Widget Post', $widget_ops, $control_ops);
+    }*/
+
+    function __construct(){
+        $widget_ops = array(
+            'classname'=>'widget-post',
+            'description'=>'Widget permettant l\'affichage d\'une liste d\'articles selon la catégorie'
+        );
+        $control_ops = array(
+            'width'=>300,
+            'height'=>350,
+            'id_base'=>'widget-post'
+        );
+        parent::__construct('widget-post','Widget Post', $widget_ops, $control_ops);
     }
 
     /**
@@ -46,7 +59,7 @@ class Widget_Post extends WP_Widget {
     Méthode qui sert à afficher les formulaires de configuration du widget dans l'administration.
      */
     function form($instance){
-        $defaults=array('title'=>'Articles');
+        $defaults=array('title'=>'Articles','category' => 0);
         $instance=wp_parse_args($instance, $defaults);
         ?>
         <p>
@@ -79,10 +92,12 @@ class Widget_Post extends WP_Widget {
         <?php
     }
 
-    function register_my_widget(){
-        register_widget('Widget_Post');
-    }
+
+}
+function register_my_widget(){
+    register_widget('Widget_Post');
 }
 
-add_action('widget_init','register_my_widget');
+add_action('widgets_init','register_my_widget');
+
 
