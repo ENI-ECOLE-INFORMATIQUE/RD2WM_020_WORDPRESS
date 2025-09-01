@@ -57,7 +57,7 @@ class Widget_Post extends WP_Widget {
             $args='';
         }
         //Récupérer les articles associés à la catégorie.
-        $myposts= get_post($args);
+        $myposts= get_posts($args);
         echo '<ul>';
         foreach($myposts as $post){
             setup_postdata($post);
