@@ -12,6 +12,8 @@ $aErrors = ["empty_ko" => "Tous les champs sont obligatoires.",
             "tech_ko" => "Une erreur technique ou de sécurité est survenue."           
 ];
 ?>
+
+<?php wp_nonce_field('create_map_action', 'create_map_nonce'); ?>
 <div class="wrap">   
     <h2>My OpenStreetMap</h2>
 </div>
@@ -47,11 +49,35 @@ $aErrors = ["empty_ko" => "Tous les champs sont obligatoires.",
         $color = substr($_GET["msg"], -2);
         echo"<div class='msg-".$color."'>".$aErrors[$_GET["msg"]]."</div>\n";   
     }    
-    ?>        
+    ?>
+
+    <?php if (isset($_GET['msg'])) : ?>
+        <div class="notice notice-<?php echo ($_GET['msg'] === 'cre_ok') ? 'success' : 'error'; ?>">
+            <p>
+                <?php
+                switch ($_GET['msg']) {
+                    case 'cre_ok':
+                        echo '✅ Carte créée avec succès.';
+                        break;
+                    case 'cre_ko':
+                        echo '❌ Erreur lors de la création de la carte.';
+                        break;
+                    case 'empty_ko':
+                        echo '⚠️ Tous les champs sont obligatoires.';
+                        break;
+                }
+                ?>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <h3 class="title" >Créez une carte :</h3> 
     <form action="?page=my-osm/my-osm.php&action=createmap" method="post">
-        <p id="Mg-title-error" style="color:red;display:none;">Entrez un titre, svp</p> 
+        <?php
+         //crée un champ nonce sécurisé
+        wp_nonce_field('createmap','create_map_nonce');
+        ?>
+        <p id="Mg-title-error" style="color:red;display:none;">Entrez un titre, svp</p>
         <p><label for="Mg-title">Titre* :</label><br><input type="text" id="Mg-title" name="Mg-title"></p>
             
         <p id="Mg-latitude-error" style="color:red;display:none;">Entrez une latitude, svp</p>    

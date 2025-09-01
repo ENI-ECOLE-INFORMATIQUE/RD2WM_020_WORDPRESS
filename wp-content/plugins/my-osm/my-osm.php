@@ -3,6 +3,7 @@
 Plugin Name: My OpenStreetMap 
 Description: Créer des cartes OpenStreetMap.
 Version: 1.0
+Text Domain: my-osm
 */
 if (!class_exists("My_Osm")) 
 {    
@@ -145,20 +146,28 @@ if (!class_exists("My_Osm"))
         {
             require_once("templates/admin_home.php");  
         }
+
+
+
                  
-        if ($_GET['action'] == 'createmap')
-        {          
-            // +++ TODO : Sécuriser davantage les données provenant du formulaire : filter_var, type de données etc.) +++
-            if (!empty(trim($_POST['Mg-title'])) && (!empty(trim($_POST['Mg-latitude']))) && (!empty(trim($_POST['Mg-longitude']))) )
-            {   
-                if ($this->osm_insertMap($_POST['Mg-title'], $_POST['Mg-latitude'], $_POST['Mg-longitude'])) 
-                {    
+        if (isset($_GET['action']) && $_GET['action'] == 'createmap')
+        {
+            // Sécuriser d'avantage les données provenant du formulaire : filter_var, type de données etc.)
+            $title = sanitize_text_field($_POST['Mg-title']);
+            $lat = sanitize_text_field($_POST['Mg-latitude']);
+            $long = sanitize_text_field($_POST['Mg-longitude']);
+
+            if (!empty(trim($title)) && (!empty(trim($lat))) && (!empty(trim($long))) )
+            {
+                if ($this->osm_insertMap($title, $lat, $long))
+                {
                     /* 
                      * https://www.w3schools.com/howto/howto_js_redirect_webpage.asp 
                      * https://christianelagace.com/wordpress/la-redirection-avec-wordpress
                      */
                     $sUrl = $this->url."&msg=cre_ok";
-                   	echo"<script>window.location.replace('".$sUrl."');</script>\n";
+                   	//echo"<script>window.location.replace('".$sUrl."');</script>\n";
+                    echo "<script>window.location.replace('" . esc_url($sUrl) . "');</script>";
                     exit;  
 				}
 				else
@@ -175,11 +184,15 @@ if (!class_exists("My_Osm"))
                 exit;  
             }
         }
-        else if ($_GET['action']=='updatemap')
-        {                       
-            if ((trim($_POST['Mg-title']) != '') && (trim($_POST['Mg-latitude']) != '') && (trim($_POST['Mg-longitude']) != "") && (trim($_POST['Mg-id']) != ''))
+        elseif (isset($_GET['action']) && $_GET['action']=='updatemap')
+        {
+            // Sécuriser d'avantage les données provenant du formulaire : filter_var, type de données etc.)
+            $title = sanitize_text_field($_POST['Mg-title']);
+            $lat = sanitize_text_field($_POST['Mg-latitude']);
+            $long = sanitize_text_field($_POST['Mg-longitude']);
+            if ((trim($title) != '') && (trim($lat) != '') && (trim($long) != "") && (trim($_POST['Mg-id']) != ''))
             {
-        		if ($this->osm_updateMap($_POST['Mg-id'], $_POST['Mg-title'], $_POST['Mg-latitude'], $_POST['Mg-longitude'])) 
+        		if ($this->osm_updateMap($_POST['Mg-id'], $title, $lat, $long))
 				{      
 		            $sUrl = $this->url."&msg=upd_ok&map=".$_POST["Mg-id"];
 		            echo"<script>window.location.replace('".$sUrl."');</script>\n";
@@ -199,7 +212,7 @@ if (!class_exists("My_Osm"))
                 exit;  
             }          
         } 
-        elseif ($_GET['action'] == 'deletemap')
+        elseif (isset($_GET['action']) && $_GET['action'] == 'deletemap')
         {
             if (trim($_POST['Mg-id']) != '')
             {		  	 
@@ -233,7 +246,8 @@ if (!class_exists("My_Osm"))
         global $wpdb;  
                
         // +++ TODO : prepare() vraiment nécessaire ??? +++ 		
-        $sql = $wpdb->prepare("SELECT * FROM ".$this->table, "");  
+        //$sql = $wpdb->prepare("SELECT * FROM ".$this->table, "");
+        $sql = "SELECT * FROM {$this->table}";
          
         // https://developer.wordpress.org/reference/classes/wpdb/get_results
         return $wpdb->get_results($sql);   
@@ -318,12 +332,19 @@ if (!class_exists("My_Osm"))
       
 	// Création d'un shortcode   
     function osm_shortcode($att)
-    {      
+    {
+        $att = shortcode_atts(array(
+            'id'=>0
+        ),$att,'osm');
+
 	    /* var_dump($att); affiche le tableau :
         * array(1) { ["id"]=> string(1) "1" } 
 	    */	
-        $map = $this->osm_getMap($att['id']); 
-		            
+        $map = $this->osm_getMap(intval($att['id']));
+		if(!$map){
+            return "<p>Carte introuvable.</p>";
+        }
+
         // Il faut une hauteur min de 400px pour voir la carte
         $html = "<div id='map' style='height:400px;'></div>\n";       
         
@@ -388,8 +409,14 @@ if (isset($oMap))
     add_action('admin_menu', array($oMap, 'osm_init'));
             
     // Ajout du chargement des scripts définis dans la fonction osm_front_header()
-    add_action('wp_enqueue_scripts', array($oMap, 'osm_front_header')); 
-    
+    add_action('wp_enqueue_scripts', array($oMap, 'osm_front_header'));
+
+    //Pour ajouter des traductions plus tard.
+    add_action('plugins_loaded', function() {
+        load_plugin_textdomain('my-osm', false, dirname(plugin_basename(__FILE__)) . '/languages');
+    });
+
+
     // Création d'un shortcode
     add_shortcode('osm', array($oMap, 'osm_shortcode'));     
 } // -- fin si objet créé

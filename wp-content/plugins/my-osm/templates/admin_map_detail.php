@@ -41,6 +41,8 @@ $aErrors = ["empty_ko" => "Tous les champs sont obligatoires.",
             "del_ko" => "La suppression de la carte a échoué.",
            ];
 ?>
+
+<?php wp_nonce_field('create_map_action', 'create_map_nonce'); ?>
 <div class="wrap">   
     <h2>My OpenStreetMap</h2>
 </div>
@@ -97,8 +99,13 @@ $aErrors = ["empty_ko" => "Tous les champs sont obligatoires.",
         <h3 class="title">Paramètres :</h3>
         
 		<!-- Formulaire de modification -->
-        <form action="<?php echo $this->url; ?>&action=updatemap" method="post">        
-            <p id="Mg-title-error" style="color:red;display:none;">Entrez un titre, svp</p> 
+        <form action="<?php echo $this->url; ?>&action=updatemap" method="post">
+            <?php
+            // Crée un champ nonce sécurisé
+            wp_nonce_field('create_map_action', 'create_map_nonce');
+            ?>
+
+            <p id="Mg-title-error" style="color:red;display:none;">Entrez un titre, svp</p>
             <p>Titre* :<br><input type="text" id="Mg-title" name="Mg-title" value="<?php echo $map->titre; ?>"></p>
            
             <p id="Mg-latitude-error" style="color:red;display:none;">Entrez une latitude, svp</p>    
