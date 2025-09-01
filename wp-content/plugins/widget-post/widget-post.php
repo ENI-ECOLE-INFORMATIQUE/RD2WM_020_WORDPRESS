@@ -15,17 +15,8 @@ Text Domain: eni
 */
 class Widget_Post extends WP_Widget {
     /**
-    Méthode de construction du même nom que la classe qui sert à configurer le widget.
+    Méthode constructeur qui sert à configurer le widget.
      */
-   /* function Widget_Post(){
-        $widget_ops = array('classname'=>'widget-post',
-            'description'=>'Widget permmettant l\'affichage d\'une liste d\'articles selon la catégorie');
-        $control_ops = array('width'=>300,
-            'height'=>350,
-            'id_base'=>'widget-post');
-        $this->WP_Widget('widget-post','Widget Post', $widget_ops, $control_ops);
-    }*/
-
     function __construct(){
         $widget_ops = array(
             'classname'=>'widget-post',

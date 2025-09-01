@@ -50,28 +50,7 @@ $aErrors = ["empty_ko" => "Tous les champs sont obligatoires.",
         echo"<div class='msg-".$color."'>".$aErrors[$_GET["msg"]]."</div>\n";   
     }    
     ?>
-
-    <?php if (isset($_GET['msg'])) : ?>
-        <div class="notice notice-<?php echo ($_GET['msg'] === 'cre_ok') ? 'success' : 'error'; ?>">
-            <p>
-                <?php
-                switch ($_GET['msg']) {
-                    case 'cre_ok':
-                        echo '✅ Carte créée avec succès.';
-                        break;
-                    case 'cre_ko':
-                        echo '❌ Erreur lors de la création de la carte.';
-                        break;
-                    case 'empty_ko':
-                        echo '⚠️ Tous les champs sont obligatoires.';
-                        break;
-                }
-                ?>
-            </p>
-        </div>
-    <?php endif; ?>
-
-    <h3 class="title" >Créez une carte :</h3> 
+    <h3 class="title" >Créez une carte :</h3>
     <form action="?page=my-osm/my-osm.php&action=createmap" method="post">
         <?php
          //crée un champ nonce sécurisé
