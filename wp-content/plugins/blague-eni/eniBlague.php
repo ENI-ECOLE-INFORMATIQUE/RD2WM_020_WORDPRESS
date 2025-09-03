@@ -2,27 +2,47 @@
 /**
 * Classe en charge de créer une extension pour les Blagues.
 * @package eniBlagueCitation
-* @version 0.6
+* @version 0.7
 * @since 0.2
 * @author Denis - Stagiaires
 */
 
 /*
- Plugin Name: Eni Blague Citation TEST
- Plugin URI: http://eni-ecole.fr/plugin-wordpress-blagues-ciations
- Description: Permet de fournir une liste de blagues ou de citations en fonction d'un mot clé. Rajouter dans votre page le shortcode <strong>[EniBlagueList]</strong> pour afficher la liste de toutes les blagues ou citations présentes en base de données.
- Author: Denis Sanchez - ENI Stagiaires
- Version:0.6
- Author URI: http://eni-ecole.fr/denis
- License:GPLv2 or later
- Text Domain: ENI
-*/
+ * Plugin Name: ENI Blague & Citation
+ * Plugin URI: https://eni-ecole.fr/plugin-wordpress-blagues-citations
+ * Description: Permet d’afficher et d’administrer des blagues ou des citations (widget + page d’admin).
+ * Author: Denis Sanchez – ENI Stagiaires
+ * Author URI: https://eni-ecole.fr/
+ * Version: 0.7.0
+ * Requires at least: 6.0
+ * Tested up to: 6.8.2
+ * Requires PHP: 7.4
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: blague-eni
+ * Domain Path: /languages
+ * Update URI: false
+ */
 //Constante qui permet de récupérer le répertoire d'installation de mon plugin.
 define ('ENI_BLAGUE__PLUGIN_DIR',plugin_dir_path(__FILE__));
 require_once(ENI_BLAGUE__PLUGIN_DIR.'class.EniBlague.php');
 require_once(ENI_BLAGUE__PLUGIN_DIR.'class.EniBlague-install.php');
 require_once(ENI_BLAGUE__PLUGIN_DIR.'class.EniBlague-widget.php');
 require_once(ENI_BLAGUE__PLUGIN_DIR.'class.EniBlague-admin.php');
+
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+define( 'ENI_BLAGUE_VERSION', '0.7.0' );
+define( 'ENI_BLAGUE_FILE', __FILE__ );
+define( 'ENI_BLAGUE_PATH', plugin_dir_path( __FILE__ ) );
+define( 'ENI_BLAGUE_URL', plugin_dir_url( __FILE__ ) );
+
+// i18n
+add_action( 'plugins_loaded', function() {
+    load_plugin_textdomain( 'blague-eni', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+} );
 
 if(!class_exists("EniBlague")){
 	class EniBlague{
@@ -31,6 +51,7 @@ if(!class_exists("EniBlague")){
 		*/
 		function eniBlague_install(){
 			global $wpdb;
+            $charset_collate = $wpdb->get_charset_collate();
 			$table_eniBlague=$wpdb->prefix.'eniBlague';
 			if($wpdb->get_var("SHOW TABLES LIKE '$table_eniBlague'")!=$table_eniBlague){
 				$sql="CREATE TABLE $table_eniBlague (
@@ -43,7 +64,7 @@ if(!class_exists("EniBlague")){
 				require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 				//Fonction dbDelta présente dans le fichier upgrade.php
 				dbDelta($sql);
-				
+                update_option( 'eni_blague_db_version', ENI_BLAGUE_VERSION );
 				eniBlague_install_BD($table_eniBlague);
 			}
 		}
@@ -65,7 +86,13 @@ if(!class_exists("EniBlague")){
 if(class_exists("EniBlague")){
 	$inst_EniBlague = new EniBlague();
 	//Ajout d'un shortcode pour ajouter dans une page ou un article la liste des blagues présentes dans la BD.
-	add_shortcode('EniBlagueList','eniBlagueAffichageList');
+	//add_shortcode('EniBlagueList','eniBlagueAffichageList');
+    add_action( 'init', function() {
+        add_shortcode( 'eniblague_list', 'eniBlagueAffichageList' );   // recommandé (lowercase)
+        add_shortcode( 'eniblaguelist', 'eniBlagueAffichageList' );   // alias
+        add_shortcode( 'EniBlagueList', 'eniBlagueAffichageList' );   // legacy
+        add_shortcode( 'ENIBlagueList', 'eniBlagueAffichageList' );   // legacy
+    } );
 }
 
 if(isset($inst_EniBlague)){

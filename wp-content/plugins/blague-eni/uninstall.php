@@ -1,18 +1,14 @@
 <?php
-if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) )
-	exit();
-
-function eniBlague_uninstall(){
-
-    global $wpdb; 
-     
-    $table_site = $wpdb->prefix.'eniBlague'; 
-    
-  if($wpdb->get_var("SHOW TABLES LIKE '$table_site'") == $table_site){    
-        $sql = "DROP TABLE `$table_site`";  
-        $wpdb->query($sql);
-  }   
+// Uninstall cleanup for ENI Blague & Citation
+if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+    exit;
 }
 
-eniBlague_uninstall();  
-?>
+global $wpdb;
+$table = $wpdb->prefix . 'eni_blague';
+// Remove table if it exists
+$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
+
+// Delete plugin options/transients if any
+delete_option( 'eni_blague_db_version' );
+delete_transient( 'eni_blague_cache' );
