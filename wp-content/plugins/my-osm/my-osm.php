@@ -46,7 +46,7 @@ if (!class_exists("My_Osm"))
             * - Longitude: 11 chiffres max dont 8 max après la virgule (exemple: -180.00000001)
             * - Latitude max : 10 chiffres max dont 8 max après la virgule (exemple: -90.00000001)
             * 
-            * On devrait donc les stocker en type DECIMAL mais cela pose des problèmes de formlatage dans les requêtes préparées, 
+            * On devrait donc les stocker en type DECIMAL mais cela pose des problèmes de formatage dans les requêtes préparées,
             * pour simplifier on les stocke comme chaînes en VARCHAR.  
             * 
             * https://qastack.fr/programming/15965166/what-is-the-maximum-length-of-latitude-and-longitude
@@ -60,7 +60,7 @@ if (!class_exists("My_Osm"))
    
             /* Inclusion du fichier 'upgrade.php' nécessaire car c'est lui qui contient le code 
             * de la fonction dbDelta utilisée à la ligne suivante
-            * ABSPATH = chemin absolu vers le répertoire du projet = 'C:\wamp\www\wordpress/'                  
+            * ABSPATH = chemin absolu vers le répertoire du projet = 'C:\wamp\www\wordpress/'  ou 'xampp\htdocs\wordpress'
             */
             if (require_once(ABSPATH."wp-admin/includes/upgrade.php")) 
 			{
