@@ -1,0 +1,51 @@
+.adminlabel{
+    clear:both;
+    float:left;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 20%;
+    text-align: right;
+}
+.msgErreur{
+    color:red;
+    display:none;
+    padding-left: 22%;
+}
+
+.newBloc{
+    margin-top:55px;
+}
+
+.search-field{
+    width: 300px;
+}
+
+.center{
+    text-align: center;
+}
+.ajoutSuccess{
+    font-size: 1.2em;
+    color:green;
+}
+
+.blagueFieldset{
+    margin-top: 15px;
+    border-width: 1px;
+    border-style: groove;
+    border-color: darkgrey;
+}
+
+.blagueFieldset legend{
+    margin-left: 40px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.blockAffichage{
+    margin-top: 95px;
+}
+
+.bouton{
+    padding-left: 22%;
+    display: inline-flex;
+}
